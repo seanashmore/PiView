@@ -45,6 +45,8 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
     private var scaleAnimator: ValueAnimator
     private var deScaleAnimator: ValueAnimator
 
+    private lateinit var onSegmentClickListener: OnSegmentClickListener
+
     init {
         segmentPaint.color = ContextCompat.getColor(context, android.R.color.holo_red_dark)
 
@@ -81,6 +83,9 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
                 if (isInsideCircle(event)) {
                     for (segment in segmentManager.segments) {
                         if (isInsideSegment(event, segment)) {
+                            if(::onSegmentClickListener.isInitialized) {
+                                onSegmentClickListener.onSegmentTapped(segment)
+                            }
                             if (segment.scale == SEGMENT_SCALED) {
                                 segment.startDescaleAnimator().addUpdateListener { invalidate() }
                             } else if (segment.scale == SEGMENT_REGULAR) {
@@ -171,5 +176,13 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
 
     fun removeSegment(segment: Segment) {
         segmentManager.removeSegment(segment)
+    }
+
+    fun setOnSegmentClickListener(onSegmentClickListener: OnSegmentClickListener) {
+        this.onSegmentClickListener = onSegmentClickListener
+    }
+
+    interface OnSegmentClickListener {
+        fun onSegmentTapped(segment: Segment)
     }
 }

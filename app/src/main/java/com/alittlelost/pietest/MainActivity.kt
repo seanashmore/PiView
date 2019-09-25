@@ -1,7 +1,9 @@
 package com.alittlelost.pietest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.alittlelost.piview.PiView
 import com.alittlelost.piview.Segment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -30,5 +32,11 @@ class MainActivity : AppCompatActivity() {
         piView.addSegment(segment3)
         piView.addSegment(segment1)
         piView.addSegment(segment2)
+
+        piView.setOnSegmentClickListener(object : PiView.OnSegmentClickListener {
+            override fun onSegmentTapped(segment: Segment) {
+                Log.i("SA", "Segment ${segment.tag} was tapped")
+            }
+        })
     }
 }
