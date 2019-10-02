@@ -10,6 +10,7 @@
     <com.alittlelost.piview.PiView
         android:id="@+id/piView"
         app:strokeSegments="true"
+        app:strokeSegmentsWidth="5.0"
         android:layout_width="300dp"
         android:layout_height="300dp" />
 

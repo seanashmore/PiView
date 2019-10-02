@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.getFloatOrThrow
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -39,20 +40,34 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
     private var scale = 1.0f
 
     private var strokeSegments: Boolean = false
+    private var strokeSegmentsWidth = 10.0f
 
     private var oval = RectF()
 
-    private var scaleAnimator: ValueAnimator
-    private var deScaleAnimator: ValueAnimator
+    private lateinit var scaleAnimator: ValueAnimator
+    private lateinit var deScaleAnimator: ValueAnimator
 
     private lateinit var onSegmentClickListener: OnSegmentClickListener
 
     init {
+        parseAtttributes(attributeSet)
+        initPaints()
+        initAnimators()
+    }
+
+    private fun parseAtttributes(attributeSet: AttributeSet) {
+        val attrArray = context.obtainStyledAttributes(attributeSet, R.styleable.PiView, 0, 0)
+        strokeSegments = attrArray.getBoolean(R.styleable.PiView_strokeSegments, false)
+        strokeSegmentsWidth = attrArray.getFloatOrThrow(R.styleable.PiView_strokeSegmentsWidth)
+        attrArray.recycle()
+    }
+
+    private fun initPaints() {
         segmentPaint.color = ContextCompat.getColor(context, android.R.color.holo_red_dark)
 
         segmentStrokePaint.color = ContextCompat.getColor(context, android.R.color.black)
         segmentStrokePaint.style = Paint.Style.STROKE
-        segmentStrokePaint.strokeWidth = 10.0f
+        segmentStrokePaint.strokeWidth = strokeSegmentsWidth
 
         circlePaint.color = ContextCompat.getColor(context, android.R.color.black)
         circlePaint.style = Paint.Style.STROKE
@@ -65,11 +80,9 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
         debugPaint.color = ContextCompat.getColor(context, android.R.color.holo_orange_light)
         debugPaint.strokeWidth = 5.0f
         debugPaint.style = Paint.Style.STROKE
+    }
 
-        val attrArray = context.obtainStyledAttributes(attributeSet, R.styleable.PiView, 0, 0)
-        strokeSegments = attrArray.getBoolean(R.styleable.PiView_strokeSegments, false)
-        attrArray.recycle()
-
+    private fun initAnimators() {
         scaleAnimator = ValueAnimator.ofFloat(SEGMENT_REGULAR, SEGMENT_SCALED)
         deScaleAnimator = ValueAnimator.ofFloat(SEGMENT_SCALED, SEGMENT_REGULAR)
     }

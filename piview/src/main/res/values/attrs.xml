@@ -3,6 +3,7 @@
 
     <declare-styleable name="PiView">
         <attr name="strokeSegments" format="boolean" />
+        <attr name="strokeSegmentsWidth" format="float" />
     </declare-styleable>
 
 
