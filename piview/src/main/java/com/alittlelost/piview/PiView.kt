@@ -24,11 +24,9 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
         const val PADDING = 50.0f
     }
 
-    private val circlePaint = Paint()
     private val segmentPaint = Paint()
     private val segmentStrokePaint = Paint()
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val debugPaint = Paint()
 
     private var circleCenterX: Float = 0.0f
     private var circleCenterY: Float = 0.0f
@@ -58,7 +56,7 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
     private fun parseAtttributes(attributeSet: AttributeSet) {
         val attrArray = context.obtainStyledAttributes(attributeSet, R.styleable.PiView, 0, 0)
         strokeSegments = attrArray.getBoolean(R.styleable.PiView_strokeSegments, false)
-        strokeSegmentsWidth = attrArray.getFloatOrThrow(R.styleable.PiView_strokeSegmentsWidth)
+        strokeSegmentsWidth = attrArray.getFloat(R.styleable.PiView_strokeSegmentsWidth, 5.0f)
         attrArray.recycle()
     }
 
@@ -69,17 +67,9 @@ class PiView(context: Context, attributeSet: AttributeSet) : View(context, attri
         segmentStrokePaint.style = Paint.Style.STROKE
         segmentStrokePaint.strokeWidth = strokeSegmentsWidth
 
-        circlePaint.color = ContextCompat.getColor(context, android.R.color.black)
-        circlePaint.style = Paint.Style.STROKE
-        circlePaint.strokeWidth = 10.0f
-
         textPaint.color = ContextCompat.getColor(context, android.R.color.holo_red_dark)
         textPaint.style = Paint.Style.FILL_AND_STROKE
         textPaint.textSize = 40.0f
-
-        debugPaint.color = ContextCompat.getColor(context, android.R.color.holo_orange_light)
-        debugPaint.strokeWidth = 5.0f
-        debugPaint.style = Paint.Style.STROKE
     }
 
     private fun initAnimators() {
